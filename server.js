@@ -7,7 +7,6 @@ const { promisify } = require('util');
 const db = require('./db');
 
 const app = express();
-const PORT = 3000;
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -535,6 +534,5 @@ app.delete('/api/egresos/:id', async (req, res) => {
 });
 
 // ===== Start =====
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));
