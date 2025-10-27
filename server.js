@@ -1,13 +1,22 @@
-// server.js (completo y actualizado)
 const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser');
 const cors = require('cors');
-const { promisify } = require('util');
+const path = require('path');
 const db = require('./db');
-
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+
+app.use(cors());
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/api/alumnas', (req, res) => {
+  db.query('SELECT * FROM alumnas', (err, result) => {
+    if (err) return res.status(500).json({ error: 'DB error' });
+    res.json(result);
+  });
+});
+
+app.listen(PORT, () => console.log(`Servidor en puerto ${PORT}`));
 
 app.use(cors());
 app.use(bodyParser.json());

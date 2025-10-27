@@ -1,19 +1,13 @@
-const mysql = require('mysql2');
-
-const db = mysql.createConnection({
-  host: 'tramway.proxy.rlwy.net',
-  user: 'root',
-  password: 'KAAVtnBsHkOCvoDfIAMVzRHDqEqrrbhV',
-  database: 'railway',
-  port: 48958
+const mysql = require('mysql');
+const pool = mysql.createPool({
+  connectionLimit: 10,
+  host: process.env.MYSQLHOST,
+  user: process.env.MYSQLUSER,
+  password: process.env.MYSQLPASSWORD,
+  database: process.env.MYSQLDATABASE,
+  port: process.env.MYSQLPORT || 3306
 });
 
-db.connect((err) => {
-  if (err) {
-    console.error('Error al conectar con MySQL Railway:', err);
-    return;
-  }
-  console.log('Conectado correctamente a MySQL en Railway');
-});
+setInterval(() => pool.query('SELECT 1'), 300000); // keep-alive cada 5 min
 
-module.exports = db;
+module.exports = pool;
