@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const db = require('./db');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -9,13 +10,13 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/api/alumnas', (req, res) => {
-  db.query('SELECT * FROM alumnas', (err, result) => {
-    if (err) return res.status(500).json({ error: 'DB error' });
-    res.json(result);
+// RUTA TEST para confirmar conexión
+app.get('/ping', (req, res) => {
+  db.query('SELECT NOW() AS hora', (err, rows) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ ok: true, hora: rows[0].hora });
   });
 });
-
 app.listen(PORT, () => console.log(`Servidor en puerto ${PORT}`));
 
 app.use(cors());
