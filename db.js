@@ -1,13 +1,13 @@
-const mysql = require('mysql2');
-
-const db = mysql.createConnection({
-  host: 'tramway.proxy.rlwy.net',
-  user: 'root',
-  password: 'KAAVtnBsHkOCvoDfIAMVzRHDqEqrrbhV',
-  database: 'railway',
-  port: 48958
+const mysql = require('mysql');
+const pool = mysql.createPool({
+  connectionLimit: 10,
+  host: process.env.MYSQLHOST,
+  port: process.env.MYSQLPORT,
+  user: process.env.MYSQLUSER,
+  password: process.env.MYSQLPASSWORD,
+  database: process.env.MYSQLDATABASE
 });
-
+module.exports = pool;
 db.connect((err) => {
   if (err) {
     console.error('Error al conectar con MySQL Railway:', err);
